@@ -1,0 +1,14 @@
+{
+  "name": "sort-brite",
+  "version": "1.0.0",
+  "description": "Analyse image brightness",
+  "main": "index.js",
+  "scripts": {
+    "test": "electron ./index.js"
+  },
+  "author": "Jeanre Van Wyk",
+  "license": "ISC",
+  "devDependencies": {
+    "electron": "^33.2.0"
+  }
+}
