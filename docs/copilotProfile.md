@@ -416,14 +416,42 @@ Examples: `dw` → delete word · `ciw` → change word · `yip` → yank paragr
 
 ## Aerospace
 
-| Shortcut | Description             |
-| -------- | ----------------------- |
-| `<C-f>`  | Forward (Page down)     |
-| `<C-d>`  | Move down (Half a page) |
-| `<C-b>`  | Backward (Page up)      |
-| `<C-u>`  | Move up (Half a page)   |
-| `<C-o>`  | Jump back               |
-| `<C-i>`  | Jump forward            |
+Leader key: `alt` (⌥)
+
+### Focus & Move
+
+| Shortcut         | Description   |     | Shortcut               | Description          |
+| ---------------- | ------------- | --- | ---------------------- | -------------------- |
+| `alt-h`          | Focus left    |     | `alt-shift-h`          | Move window left     |
+| `alt-j`          | Focus down    |     | `alt-shift-j`          | Move window down     |
+| `alt-k`          | Focus up      |     | `alt-shift-k`          | Move window up       |
+| `alt-l`          | Focus right   |     | `alt-shift-l`          | Move window right    |
+
+### Layout & Resize
+
+| Shortcut    | Description                         |
+| ----------- | ----------------------------------- |
+| `alt-/`     | Cycle layout: tiles → horizontal → vertical |
+| `alt-,`     | Cycle layout: accordion → horizontal → vertical |
+| `alt--`     | Resize smart -50                    |
+| `alt-=`     | Resize smart +50                    |
+
+### Workspaces
+
+| Shortcut          | Description                       |     | Shortcut                | Description                        |
+| ----------------- | --------------------------------- | --- | ----------------------- | ---------------------------------- |
+| `alt-1` … `alt-9` | Switch to workspace 1–9           |     | `alt-shift-1` … `alt-shift-9` | Move window to workspace 1–9 |
+| `alt-tab`         | Toggle last workspace             |     | `alt-shift-tab`         | Move workspace to next monitor     |
+
+### Service Mode  (`alt-shift-;` to enter, `esc` to exit)
+
+| Shortcut      | Description                          |
+| ------------- | ------------------------------------ |
+| `esc`         | Reload config & return to main mode  |
+| `r`           | Flatten / reset layout               |
+| `f`           | Toggle floating ↔ tiling             |
+| `backspace`   | Close all windows except current     |
+| `alt-shift-h/j/k/l` | Join window with left/down/up/right neighbor |
 
 ---
 
