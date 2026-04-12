@@ -38,6 +38,7 @@ app.post('/api/plants', (req, res) => {
     id: Date.now().toString(),
     name: req.body.name || 'New Plant',
     location: req.body.location || '',
+    machinery: [],
     downtime: [],
     breakdowns: [],
     spares: [],
@@ -46,6 +47,41 @@ app.post('/api/plants', (req, res) => {
   data.plants.push(plant);
   saveData(data);
   res.json(plant);
+});
+
+app.post('/api/plants/:plantId/machinery', (req, res) => {
+  const data = loadData();
+  const plant = data.plants.find(p => p.id === req.params.plantId);
+  if (!plant) {
+    return res.status(404).json({ error: 'Plant not found' });
+  }
+  
+  if (!Array.isArray(plant.machinery)) {
+    plant.machinery = [];
+  }
+  
+  const machineryName = req.body.name || '';
+  if (machineryName && !plant.machinery.includes(machineryName)) {
+    plant.machinery.push(machineryName);
+  }
+  
+  saveData(data);
+  res.json({ machinery: plant.machinery });
+});
+
+app.delete('/api/plants/:plantId/machinery/:name', (req, res) => {
+  const data = loadData();
+  const plant = data.plants.find(p => p.id === req.params.plantId);
+  if (!plant) {
+    return res.status(404).json({ error: 'Plant not found' });
+  }
+  
+  if (Array.isArray(plant.machinery)) {
+    plant.machinery = plant.machinery.filter(m => m !== req.params.name);
+  }
+  
+  saveData(data);
+  res.json({ machinery: plant.machinery });
 });
 
 app.post('/api/plants/:plantId/records', (req, res) => {
@@ -69,6 +105,7 @@ app.post('/api/plants/:plantId/records', (req, res) => {
       break;
     case 'breakdown':
       record.system = req.body.system || '';
+      record.machinery = req.body.machinery || '';
       plant.breakdowns.push(record);
       break;
     case 'spare':

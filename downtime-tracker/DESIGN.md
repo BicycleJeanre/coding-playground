@@ -39,12 +39,13 @@ The current implementation is a simple prototype intended to be easy to run loca
 
 ### 4.1. Main Screen
 
-The main page has two primary areas:
+The main page has three primary areas:
 
 1. **Plant panel**
    1. plant selector dropdown
    2. add plant button
    3. selected plant summary showing name and location
+   4. machinery management panel for adding/removing machinery items
 2. **Tabbed records panel**
    1. Downtime
    2. Breakdowns
@@ -55,8 +56,11 @@ The main page has two primary areas:
 
 1. Add a plant by entering a name and location via browser prompts.
 2. Switch between plants with the dropdown.
-3. View existing records for the selected plant.
-4. Add a new record from the active tab.
+3. Add machinery items to the selected plant via the machinery panel.
+4. Remove machinery items from the plant.
+5. View existing records for the selected plant.
+6. Add a new record from the active tab.
+7. When adding a breakdown, select the affected machinery from the plant's machinery list.
 
 ## 5. Data Model
 
@@ -77,12 +81,15 @@ Each plant contains:
   "id": "string",
   "name": "string",
   "location": "string",
+  "machinery": ["string"],
   "downtime": [],
   "breakdowns": [],
   "spares": [],
   "observations": []
 }
 ```
+
+The `machinery` array stores user-defined machinery items for the plant.
 
 ### 5.3. Shared Record Fields
 
@@ -95,7 +102,7 @@ All records currently include:
 
 ### 5.4. Record-Specific Fields
 
-| Record type | Collection | Extra fields |
+| Record type | Collection | Extra fi, `machinery`elds |
 | --- | --- | --- |
 | Downtime | `downtime` | `duration` |
 | Breakdown | `breakdowns` | `system` |
@@ -106,7 +113,7 @@ All records currently include:
 
 ### 6.1. `GET /api/plants`
 
-Returns the full list of plants, including all nested record arrays.
+Returns the full list of plants, including all nested record arrays and machinery list.
 
 ### 6.2. `POST /api/plants`
 
@@ -115,7 +122,8 @@ Creates a new plant with:
 1. generated `id`
 2. provided `name`
 3. provided `location`
-4. empty record collections
+4. empty `machinery` array
+5. empty record collections
 
 ### 6.3. `POST /api/plants/:plantId/records`
 
@@ -129,6 +137,26 @@ Expected `type` values:
 4. `observation`
 
 The server rejects unknown types with `400 Invalid record type` and rejects unknown plants with `404 Plant not found`.
+
+### 6.4. `POST /api/plants/:plantId/machinery`
+
+Adds a new machinery item to a plant's machinery list.
+
+Request body:
+```json
+{
+  "name": "the machinery panel for the selected plant
+4. renders each tab's list and form
+
+### 7.2. Form Generation
+
+Forms are built dynamically per tab. Each form always asks for a note and may ask for one or more type-specific field sets:
+
+1. downtime: duration
+2. breakdowns: system and machinery (dropdown populated from plant's machinery list)
+Removes a machinery item from a plant's machinery list.
+
+Returns the updated machinery array.
 
 ## 7. Frontend Behavior
 

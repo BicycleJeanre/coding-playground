@@ -35,6 +35,7 @@ function renderSelectedPlant() {
   const plant = plants.find(p => p.id === selectedPlantId);
   if (!plant) {
     plantDetails.innerHTML = '<p>Please add a plant to get started.</p>';
+    document.getElementById('machineryPanel').style.display = 'none';
     tabContents.forEach(content => (content.innerHTML = ''));
     return;
   }
@@ -44,15 +45,39 @@ function renderSelectedPlant() {
     <p><strong>Location:</strong> ${plant.location}</p>
   `;
 
-  renderRecords('downtime', plant.downtime);
-  renderRecords('breakdowns', plant.breakdowns);
-  renderRecords('spares', plant.spares);
-  renderRecords('observations', plant.observations);
+  document.getElementById('machineryPanel').style.display = 'block';
+  renderMachineryPanel(plant);
+
+  renderRecords('downtime', plant.downtime, plant);
+  renderRecords('breakdowns', plant.breakdowns, plant);
+  renderRecords('spares', plant.spares, plant);
+  renderRecords('observations', plant.observations, plant);
 }
 
-function renderRecords(type, records) {
+function renderMachineryPanel(plant) {
+  const panel = document.getElementById('machineryList');
+  const machinery = plant.machinery || [];
+  
+  panel.innerHTML = machinery.map(m => `
+    <div style="background: #e2e8f0; padding: 8px; border-radius: 6px; margin-bottom: 6px; display: flex; justify-content: space-between; align-items: center;">
+      <span>${m}</span>
+      <button onclick="removeMachinery('${plant.id}', '${m}')" style="background: #dc2626; padding: 4px 8px; font-size: 0.85rem;">Remove</button>
+    </div>
+  `).join('');
+}
+
+async function removeMachinery(plantId, machineryName) {
+  await fetch(`/api/plants/${plantId}/machinery/${encodeURIComponent(machineryName)}`, {
+    method: 'DELETE',
+    headers: { 'Content-Type': 'application/json' }
+  });
+  await fetchPlants();
+}
+
+function renderRecords(type, records, plant) {
   const container = document.getElementById(`${type}Tab`);
   const title = type.charAt(0).toUpperCase() + type.slice(1);
+  const machinerOptions = plant.machinery ? plant.machinery.map(m => `<option value="${m}">${m}</option>`).join('') : '';
   container.innerHTML = `
     <div class="record-list"></div>
     <div class="form-block">
@@ -61,7 +86,7 @@ function renderRecords(type, records) {
         <label>Note</label>
         <textarea name="note" rows="2" required></textarea>
         ${type === 'downtime' ? '<div class="row"><div><label>Duration</label><input name="duration" required /></div></div>' : ''}
-        ${type === 'breakdowns' ? '<div class="row"><div><label>System</label><input name="system" required /></div></div>' : ''}
+        ${type === 'breakdowns' ? `<div class="row"><div><label>System</label><input name="system" required /></div><div><label>Machinery</label><select name="machinery" required><option value="">Select Machinery...</option>${machinerOptions}</select></div></div>` : ''}
         ${type === 'spares' ? '<div class="row"><div><label>Part Number</label><input name="partNumber" required /></div><div><label>Priority</label><select name="priority"><option>Normal</option><option>High</option><option>Urgent</option></select></div></div>' : ''}
         ${type === 'observations' ? '<div class="row"><div><label>Severity</label><select name="severity"><option>Normal</option><option>Medium</option><option>High</option></select></div></div>' : ''}
         <button type="submit">Save</button>
@@ -87,10 +112,11 @@ function renderRecords(type, records) {
     event.preventDefault();
     const formData = new FormData(form);
     const payload = {
-      type: type.slice(0, -1),
+      type: type === 'breakdowns' ? 'breakdown' : type === 'spares' ? 'spare' : type === 'observations' ? 'observation' : type,
       note: formData.get('note'),
       duration: formData.get('duration'),
       system: formData.get('system'),
+      machinery: formData.get('machinery'),
       partNumber: formData.get('partNumber'),
       priority: formData.get('priority'),
       severity: formData.get('severity')
@@ -112,7 +138,7 @@ function formatRecordExtra(type, record) {
     case 'downtime':
       return `Duration: ${record.duration || 'N/A'}`;
     case 'breakdowns':
-      return `System: ${record.system || 'N/A'}`;
+      return `System: ${record.system || 'N/A'} · Machinery: ${record.machinery || 'N/A'}`;
     case 'spares':
       return `Part: ${record.partNumber || 'N/A'} · Priority: ${record.priority}`;
     case 'observations':
@@ -133,6 +159,22 @@ addPlantBtn.addEventListener('click', async () => {
     body: JSON.stringify({ name, location })
   });
 
+  await fetchPlants();
+});
+
+document.getElementById('addMachineryBtn').addEventListener('click', async () => {
+  const input = document.getElementById('machineryInput');
+  const machineryName = input.value.trim();
+  
+  if (!machineryName) return;
+  
+  await fetch(`/api/plants/${selectedPlantId}/machinery`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ name: machineryName })
+  });
+  
+  input.value = '';
   await fetchPlants();
 });
 
