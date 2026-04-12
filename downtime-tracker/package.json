@@ -1,0 +1,12 @@
+{
+  "name": "downtime-tracker",
+  "version": "0.1.0",
+  "description": "Basic industrial plant downtime tracking framework",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "dependencies": {
+    "express": "^4.18.4"
+  }
+}

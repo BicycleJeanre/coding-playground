@@ -1,0 +1,21 @@
+{
+  "plants": [
+    {
+      "id": "plant-1",
+      "name": "Plant A",
+      "location": "North Site",
+      "downtime": [
+        { "id": "dt-1", "createdAt": "2026-04-01T08:00:00.000Z", "note": "Compressor outage", "duration": "2h", "details": {} }
+      ],
+      "breakdowns": [
+        { "id": "bd-1", "createdAt": "2026-04-02T10:30:00.000Z", "note": "Pump failure", "system": "Cooling", "details": {} }
+      ],
+      "spares": [
+        { "id": "sp-1", "createdAt": "2026-04-02T11:00:00.000Z", "note": "Order spare motor", "partNumber": "MTR-100", "priority": "High", "details": {} }
+      ],
+      "observations": [
+        { "id": "ob-1", "createdAt": "2026-04-03T13:15:00.000Z", "note": "Leak observed at valve", "severity": "Medium", "details": {} }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Industrial Plant Downtime Tracker</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <div class="app-shell">
+    <header>
+      <h1>Plant Downtime Tracker</h1>
+      <p>Track downtime, breakdowns, critical spares, and observations across multiple plants.</p>
+    </header>
+
+    <section class="panel">
+      <div class="panel-header">
+        <h2>Plants</h2>
+        <button id="addPlantBtn">Add Plant</button>
+      </div>
+      <select id="plantSelect"></select>
+      <div class="plant-details" id="plantDetails"></div>
+    </section>
+
+    <section class="panel tabs">
+      <nav>
+        <button class="tab-button active" data-tab="downtime">Downtime</button>
+        <button class="tab-button" data-tab="breakdowns">Breakdowns</button>
+        <button class="tab-button" data-tab="spares">Critical Spares</button>
+        <button class="tab-button" data-tab="observations">Observations</button>
+      </nav>
+
+      <div class="tab-content active" id="downtimeTab"></div>
+      <div class="tab-content" id="breakdownsTab"></div>
+      <div class="tab-content" id="sparesTab"></div>
+      <div class="tab-content" id="observationsTab"></div>
+    </section>
+  </div>
+
+  <template id="recordItemTemplate">
+    <article class="record-item">
+      <h3 class="record-note"></h3>
+      <p class="record-meta"></p>
+      <p class="record-extra"></p>
+    </article>
+  </template>
+
+  <script src="app.js"></script>
+</body>
+</html>
