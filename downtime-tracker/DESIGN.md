@@ -45,7 +45,7 @@ The main page has three primary areas:
    1. plant selector dropdown
    2. add plant button
    3. selected plant summary showing name and location
-   4. machinery management panel for adding/removing machinery items
+   4. machinery management panel for adding/removing machinery items, with a predefined dropdown for common machinery types
 2. **Tabbed records panel**
    1. Downtime
    2. Breakdowns
@@ -56,11 +56,11 @@ The main page has three primary areas:
 
 1. Add a plant by entering a name and location via browser prompts.
 2. Switch between plants with the dropdown.
-3. Add machinery items to the selected plant via the machinery panel.
+3. Add machinery items to the selected plant via the machinery panel or directly from the breakdowns form.
 4. Remove machinery items from the plant.
 5. View existing records for the selected plant.
 6. Add a new record from the active tab.
-7. When adding a breakdown, select the affected machinery from the plant's machinery list.
+7. When adding a breakdown, select the affected machinery from the plant's machinery list or add a new machinery item on the fly.
 
 ## 5. Data Model
 

@@ -78,6 +78,18 @@
           "severity": "High"
         }
       ]
+    },
+    {
+      "id": "1775996538429",
+      "name": "continuous blender ",
+      "location": "endicott",
+      "machinery": [
+        "transfer conveyor"
+      ],
+      "downtime": [],
+      "breakdowns": [],
+      "spares": [],
+      "observations": []
     }
   ]
 }

@@ -86,7 +86,7 @@ function renderRecords(type, records, plant) {
         <label>Note</label>
         <textarea name="note" rows="2" required></textarea>
         ${type === 'downtime' ? '<div class="row"><div><label>Duration</label><input name="duration" required /></div></div>' : ''}
-        ${type === 'breakdowns' ? `<div class="row"><div><label>System</label><input name="system" required /></div><div><label>Machinery</label><select name="machinery" required><option value="">Select Machinery...</option>${machinerOptions}</select></div></div>` : ''}
+        ${type === 'breakdowns' ? `<div class="row"><div><label>System</label><input name="system" required /></div><div><label>Machinery</label><select name="machinery" required><option value="">Select Machinery...</option>${machinerOptions}<option value="__add_new__">Add new machinery...</option></select></div></div>` : ''}
         ${type === 'spares' ? '<div class="row"><div><label>Part Number</label><input name="partNumber" required /></div><div><label>Priority</label><select name="priority"><option>Normal</option><option>High</option><option>Urgent</option></select></div></div>' : ''}
         ${type === 'observations' ? '<div class="row"><div><label>Severity</label><select name="severity"><option>Normal</option><option>Medium</option><option>High</option></select></div></div>' : ''}
         <button type="submit">Save</button>
@@ -108,6 +108,26 @@ function renderRecords(type, records, plant) {
   }
 
   const form = document.getElementById(`${type}Form`);
+  
+  if (type === 'breakdowns') {
+    const machinerySelect = form.querySelector('select[name="machinery"]');
+    machinerySelect.addEventListener('change', async (event) => {
+      if (event.target.value === '__add_new__') {
+        const newMachinery = prompt('Enter new machinery name:');
+        if (newMachinery && newMachinery.trim()) {
+          await fetch(`/api/plants/${selectedPlantId}/machinery`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ name: newMachinery.trim() })
+          });
+          await fetchPlants();
+        } else {
+          event.target.value = '';
+        }
+      }
+    });
+  }
+  
   form.addEventListener('submit', async event => {
     event.preventDefault();
     const formData = new FormData(form);
@@ -175,6 +195,21 @@ document.getElementById('addMachineryBtn').addEventListener('click', async () =>
   });
   
   input.value = '';
+  await fetchPlants();
+});
+
+document.getElementById('machineryDropdown').addEventListener('change', async (event) => {
+  const machineryName = event.target.value;
+  
+  if (!machineryName) return;
+  
+  await fetch(`/api/plants/${selectedPlantId}/machinery`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ name: machineryName })
+  });
+  
+  event.target.value = ''; // Reset dropdown
   await fetchPlants();
 });
 
