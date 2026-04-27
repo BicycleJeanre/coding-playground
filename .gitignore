@@ -1,1 +1,7 @@
-/downtime-tracker/node_modules
+# Created by venv; see https://docs.python.org/3/library/venv.html
+bin
+.DS_store
+include
+lib
+pyvenv.cfg
+
